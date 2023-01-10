@@ -9,6 +9,8 @@ spec:
     repoURL: {{ .Values.githubRepo }}
     targetRevision: HEAD
     path: argo-master-apps
+    directory:
+      recurse: true
   destination: 
     server: https://kubernetes.default.svc
     namespace: argo-master-apps

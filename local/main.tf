@@ -13,10 +13,8 @@ variable "sealed_secrets_tls_cert_path" { type = string }
 variable "sealed_secrets_tls_key_path" { type = string }
 variable "sealed_secrets_secret_id" { type = string }
 variable "sso_secret_id" { type = string }
-variable "sso_config_secret_map" { 
-  type = map 
-  sensitive = true
-}
+variable "metric_server_revision" { type = string }
+variable "sso_namespaces" { type = list }
 
 module "secrets" {
     source = "../modules/secrets"
@@ -24,7 +22,11 @@ module "secrets" {
     tls_cert_value = base64encode(file(var.sealed_secrets_tls_cert_path))
     tls_key_value = base64encode(file(var.sealed_secrets_tls_key_path))
     sso_secret_id = var.sso_secret_id
-    sso_config_secret_map = var.sso_config_secret_map
+    sso_config_secret_map = {
+      "client-id" : base64encode(var.google_client_id),
+      "client-secret" : base64encode(var.google_secret_id)
+    }
+    sso_namespaces = var.sso_namespaces
 }
 
 module "argocd" {
@@ -49,4 +51,23 @@ module "argo_master_app" {
     depends_on = [
       module.argocd
     ]
+}
+
+
+# Create metrics server which isn't included by default for local development. Helpful for memory/cpu analysis.
+resource "helm_release" "metrics" {
+  name = "metrics-server"
+
+  repository       = "https://kubernetes-sigs.github.io/metrics-server/"
+  chart            = "metrics-server"
+  namespace        = "kube-system"
+  version          = var.metric_server_revision
+  create_namespace = true
+  values = [
+    yamlencode(
+      {
+        "args" : ["--kubelet-insecure-tls"]
+      }
+    )
+  ]
 }

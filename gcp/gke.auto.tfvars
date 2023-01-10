@@ -1,1 +1,1 @@
-node_size = "e2-medium"
+node_size = "e2-large"

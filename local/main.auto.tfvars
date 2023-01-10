@@ -5,7 +5,6 @@ domain_name = "test.org"
 sealed_secrets_tls_key_path = "~/.sealed-secrets/certs/mytls.key"
 sealed_secrets_tls_cert_path = "~/.sealed-secrets/certs/mytls.crt"
 sealed_secrets_secret_id = "sealed-secrets-tls"
-sso_secret_id = "sso-secret"
-sso_config_secret_map = {
-    "test" : "test"
-}
+sso_secret_id = "google-oauth-client-info"
+metric_server_revision = "3.8.3"
+sso_namespaces = ["airflow", "argocd", "argo-workflows"]

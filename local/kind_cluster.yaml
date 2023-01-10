@@ -20,4 +20,4 @@ nodes:
         protocol: TCP
     extraMounts:
     - hostPath: /home/jered/workplace/team-engineering/airflow/dags
-      containerPath: /opt/airflow/dags
+      containerPath: /mnt/airflow/dags
