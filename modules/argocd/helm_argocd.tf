@@ -1,25 +1,18 @@
 variable "argocd_version" { type = string }
-variable "google_client_id" { type = string }
-variable "google_secret_id" { type = string }
-variable "enable_google_auth" { type = bool }
 variable "domain_name" { type = string }
-variable "default_role" { type = string }
-variable "rbac_scopes" { type = string }
 variable "admin_password" { type = string }
 
 locals {
-  dex_config = var.enable_google_auth ? {
+  dex_config = {
     "dex.config" : <<EOF
       connectors:
-      - config:
-          issuer: https://accounts.google.com
-          clientID: ${var.google_client_id}
-          clientSecret: ${var.google_secret_id}
-        type: oidc
-        id: google
-        name: Google
+        - type: authproxy
+          id: iap_proxy
+          name: "Google IAP"
+          config:
+            userHeader: "X-Goog-Authenticated-User-Email"
     EOF
-  } : {}
+  }
 }
 
 resource "helm_release" "argocd" {
@@ -34,19 +27,25 @@ resource "helm_release" "argocd" {
     yamlencode(
       {
         "server" : {
-          "extraArgs" : ["--insecure"]
+          "extraArgs" : ["--insecure"],
+          /*
+          "service": {
+            "type" : "LoadBalancer",
+            "annotations" : {
+              "beta.cloud.google.com/backend-config" : "{\"default\": \"iap-config\"}",
+            }
+          }
+          */
         },
         "configs" : {
           "cm" : merge(
             {
-              "url" :"http://argocd.${var.domain_name}"
+              "url" : "http://argocd.${var.domain_name}"
             },
             local.dex_config != {} ? local.dex_config : {}
           ),
           "rbac" : {
-                "create" : true,
-                "policy.default" : var.default_role,
-                "scopes" : var.rbac_scopes
+            "create" : false
           },
           "secret" : {
             "argocdServerAdminPassword" : bcrypt(var.admin_password)
@@ -56,3 +55,41 @@ resource "helm_release" "argocd" {
     )
   ]
 }
+/*
+resource "kubernetes_manifest" "argocd_ingress" {
+  manifest = {
+    "apiVersion" : "networking.k8s.io/v1",
+    "kind" : "Ingress",
+    "metadata" : {
+      "name" : "ingress-argocd",
+      "namespace" : "argocd",
+      "annotations" : {
+        "ingress.kubernetes.io/rewrite-target" : "/"
+      }
+    },
+    "spec" : {
+      "rules" : [
+        {
+          "host" : "argocd.${var.domain_name}",
+          "http" : {
+            "paths" : [
+              {
+                "path" : "/",
+                "pathType" : "Prefix",
+                "backend" : {
+                  "service" : {
+                    "name" : "argocd-server",
+                    "port" : {
+                      "number" : 80
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+*/
