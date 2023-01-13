@@ -1,38 +1,71 @@
 variable "node_size" { type = string }
 
-resource "google_service_account" "gke_sa" {
-  account_id   = "gke-sa"
-  display_name = "GKE Service Account"
-}
-
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/containter_cluster
 resource "google_container_cluster" "primary" {
-  name     = "gke-cluster"
-  location = "us-east1"
-
-  # We can't create a cluster with no node pool defined, but we want to only use
-  # separately managed node pools. So we create the smallest possible default
-  # node pool and immediately delete it.
+  name                     = var.name
+  location                 = var.location
   remove_default_node_pool = true
   initial_node_count       = 1
+  network                  = google_compute_network.main.self_link
+  subnetwork               = google_compute_subnetwork.private.self_link
+  logging_service          = "logging.googleapis.com/kubernetes"
+  monitoring_service       = "monitoring.googleapis.com/kubernetes"
+  networking_mode          = "VPC_NATIVE"
+
+  addons_config {
+    horizontal_pod_autoscaling {
+      disabled = true
+    }
+  }
+
+  release_channel {
+    channel = "REGULAR"
+  }
+
+  ip_allocation_policy {
+    cluster_secondary_range_name  = "k8s-pod-range"
+    services_secondary_range_name = "k8s-service-range"
+  }
+
+  private_cluster_config {
+    enable_private_nodes    = true
+    enable_private_endpoint = false
+    master_ipv4_cidr_block  = "172.16.0.0/28"
+  }
+
+  monitoring_config {
+    enable_components = ["SYSTEM_COMPONENTS", "APISERVER", "CONTROLLER_MANAGER"]
+    managed_prometheus {
+      enabled = true
+    }
+  }
 }
 
-resource "google_container_node_pool" "primary_node_pool" {
-  name       = "gke-node-pool"
-  location   = "us-east1"
-  cluster    = google_container_cluster.primary.name
-  autoscaling = {
-    total_min_node_count = 1
-    total_max_node_count = 2
+resource "google_service_account" "kubernetes" {
+  account_id   = "kubernetes-admin"
+  display_name = "kubernetes-admin"
+}
+
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_node_pool
+resource "google_container_node_pool" "general" {
+  name       = "general"
+  cluster    = google_container_cluster.primary.id
+  node_count = var.nodecount
+
+  management {
+    auto_repair  = true
+    auto_upgrade = true
   }
 
   node_config {
     preemptible  = false
-    machine_type = var.node_size
+    machine_type = var.nodetype
 
-    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-    service_account = google_service_account.gke_sa.email
-    oauth_scopes    = [
-      "https://www.googleapis.com/auth/cloud-platform"
-    ]
+    labels = {
+      "role" = "general"
+    }
+
+    service_account = google_service_account.kubernetes.email
+    oauth_scopes    = ["https://www.googleapis.com/auth/cloud-platform"]
   }
 }

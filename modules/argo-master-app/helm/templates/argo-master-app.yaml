@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: argo-master-apps
-  namespace: argocd
+  namespace: {{ .Values.namespace }}
 spec:
   project: default
   source:
@@ -13,7 +13,7 @@ spec:
       recurse: true
   destination: 
     server: https://kubernetes.default.svc
-    namespace: argo-master-apps
+    namespace: {{ .Values.namespace }}
   syncPolicy:
     syncOptions:
     - CreateNamespace=true

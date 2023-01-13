@@ -1,1 +1,1 @@
-node_size = "e2-large"
+node_size = "e2-standard-8"
