@@ -1,6 +1,7 @@
 variable github_repo_url { type = string }
 variable app_name { type = string }
 variable "namespace" { type = string }
+variable "github_branch" { type = string }
 
 resource "helm_release" "argo-master-app" {
   name      = var.app_name
@@ -10,7 +11,8 @@ resource "helm_release" "argo-master-app" {
     yamlencode(
         {
           "githubRepo" : var.github_repo_url,
-          "namespace"  : var.namespace
+          "namespace"  : var.namespace,
+          "githubBranch" : var.github_branch
         }
     )
   ]

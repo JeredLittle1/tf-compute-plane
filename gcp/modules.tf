@@ -26,11 +26,13 @@ module "argocd" {
   tls_secret_name = "iap-tls"
 }
 
+
 module "argo_master_app" {
   source          = "../modules/argo-master-app"
   app_name        = "argo-master-app"
   github_repo_url = var.argo_master_app_repo_url
   namespace       = var.compute_plane_namespace
+  github_branch = var.argo_master_app_repo_branch
   depends_on = [
     module.argocd
   ]

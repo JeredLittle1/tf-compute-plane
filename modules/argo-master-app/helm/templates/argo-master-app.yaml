@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: {{ .Values.githubRepo }}
-    targetRevision: HEAD
+    targetRevision: {{ .Values.githubBranch }}
     path: argo-master-apps
     directory:
       recurse: true

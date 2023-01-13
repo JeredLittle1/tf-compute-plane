@@ -11,6 +11,30 @@ locals {
           }
         }
       }
+    },
+    {
+      "path" : "/airflow",
+      "pathType" : "Prefix", # Must be implementation specific or white page appears
+      "backend" : {
+        "service" : {
+          "name" : "airflow-webserver",
+          "port" : {
+            "name" : "airflow-ui"
+          }
+        }
+      }
+    },
+    {
+      "path" : "/grafana",
+      "pathType" : "Prefix", # Must be implementation specific or white page appears
+      "backend" : {
+        "service" : {
+          "name" : "kube-prometheus-stack-grafana",
+          "port" : {
+            "name" : "http-web"
+          }
+        }
+      }
     }
   ]
 }
@@ -118,6 +142,12 @@ variable "argo_master_app_repo_url" {
   default = "https://github.com/JeredLittle1/team-engineering.git"
 }
 
+variable "argo_master_app_repo_branch" { 
+  type = string
+  description = "The branch to use for the argo master app repo"
+  default = "gcp"
+}
+
 variable "sealed_secrets_secret_id" {
   type = string
   description = "The secret ID to bootstrap the certs for sealed secrets to"
@@ -134,3 +164,13 @@ variable "sealed_secrets_tls_key_path" {
   description = "The TLS key path for sealed secrets locally."
   default = "~/.sealed-secrets/certs/mytls.key"
 }
+
+/*
+variable "iap_users" {
+  type = list
+  description = "The list of users who you want to add to be authorized to login via IAP"
+  default = [
+      "user:jeredlittle1996@gmail.com",
+    ]
+}
+*/
