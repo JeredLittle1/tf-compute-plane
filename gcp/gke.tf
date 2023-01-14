@@ -1,5 +1,3 @@
-variable "node_size" { type = string }
-
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/containter_cluster
 resource "google_container_cluster" "primary" {
   name                     = var.name
@@ -33,12 +31,6 @@ resource "google_container_cluster" "primary" {
     master_ipv4_cidr_block  = "172.16.0.0/28"
   }
 
-  monitoring_config {
-    enable_components = ["SYSTEM_COMPONENTS", "APISERVER", "CONTROLLER_MANAGER"]
-    managed_prometheus {
-      enabled = true
-    }
-  }
 }
 
 resource "google_service_account" "kubernetes" {
@@ -46,7 +38,6 @@ resource "google_service_account" "kubernetes" {
   display_name = "kubernetes-admin"
 }
 
-# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_node_pool
 resource "google_container_node_pool" "general" {
   name       = "general"
   cluster    = google_container_cluster.primary.id

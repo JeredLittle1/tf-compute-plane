@@ -3,6 +3,8 @@ resource "google_project_service" "dns_api" {
 }
 
 # ! Note: The DNS domain must be purchased manually via "Cloud Domains" due to no resource in TF for this
+# ! Note: If DNS is re-created, you will need to manually update the cloud domain to use Cloud DNS again: https://console.cloud.google.com/net-services/domains/registrations
+# Otherwise, it gets removed & you won't be able to resolve your hosts.
 resource "google_dns_managed_zone" "dns-managed-zone" {
   name     = "jlittle-dns-zone"
   dns_name = "${var.domain_name}."
@@ -11,7 +13,8 @@ resource "google_dns_managed_zone" "dns-managed-zone" {
   ]
 }
 resource "google_dns_record_set" "nginx" {
-  name = "compute-plane.${google_dns_managed_zone.dns-managed-zone.dns_name}"
+  for_each = {for rule in local.ingress_rules: rule["host"] => rule }
+  name = "${each.key}."
   type = "A"
   ttl  = 300
 

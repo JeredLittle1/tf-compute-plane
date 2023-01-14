@@ -1,19 +1,3 @@
-/*
-module "ingress-nginx" {
-  source = "../modules/ingress-nginx/"
-  ip_address = resource.google_compute_global_address.nginx_static_ip.address
-  tls_secret_name = var.tls_secret_name
-  domain_name = var.domain_name
-  depends_on = [
-    resource.google_container_cluster.primary,
-    resource.google_container_node_pool.general
-  ]
-  providers = {
-    kubectl = kubectl
-  }
-}
-*/
-
 module "argocd" {
   source         = "../modules/argocd"
   domain_name    = var.domain_name
@@ -24,20 +8,11 @@ module "argocd" {
     kubectl = kubectl
   }
   tls_secret_name = "iap-tls"
-}
-
-
-module "argo_master_app" {
-  source          = "../modules/argo-master-app"
-  app_name        = "argo-master-app"
-  github_repo_url = var.argo_master_app_repo_url
-  namespace       = var.compute_plane_namespace
-  github_branch = var.argo_master_app_repo_branch
   depends_on = [
-    module.argocd
+    resource.google_container_cluster.primary,
+    resource.google_container_node_pool.general
   ]
 }
-
 module "secrets" {
   source           = "../modules/secrets"
   sealed_secret_id = var.sealed_secrets_secret_id

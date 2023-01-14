@@ -1,44 +1,3 @@
-locals {
-  ingress_paths = [
-    {
-      "path" : "/cd",
-      "pathType" : "Prefix", # Must be implementation specific or white page appears
-      "backend" : {
-        "service" : {
-          "name" : "argocd-server",
-          "port" : {
-            "number" : 80
-          }
-        }
-      }
-    },
-    {
-      "path" : "/airflow",
-      "pathType" : "Prefix", # Must be implementation specific or white page appears
-      "backend" : {
-        "service" : {
-          "name" : "airflow-webserver",
-          "port" : {
-            "name" : "airflow-ui"
-          }
-        }
-      }
-    },
-    {
-      "path" : "/grafana",
-      "pathType" : "Prefix", # Must be implementation specific or white page appears
-      "backend" : {
-        "service" : {
-          "name" : "kube-prometheus-stack-grafana",
-          "port" : {
-            "name" : "http-web"
-          }
-        }
-      }
-    }
-  ]
-}
-
 variable "project" {
   description = "The project ID to host the cluster in"
   type        = string
@@ -74,12 +33,6 @@ variable "nodetype" {
   description = "type of nodes"
   type        = string
   default     = "e2-standard-4"
-}
-
-variable "whitelist-ips" {
-  description = "ip's allowed to access k8s controlplane"
-  type        = list(string)
-  default     = ["185.207.249.37/32"]
 }
 
 variable "oauth_client_id" {
@@ -136,16 +89,10 @@ variable "compute_plane_namespace" {
   default = "compute-plane"
 }
 
-variable "argo_master_app_repo_url" {
+variable "team_repo_url" {
   type = string
   description = "The Github repo URL which hosts the Argo applications"
   default = "https://github.com/JeredLittle1/team-engineering.git"
-}
-
-variable "argo_master_app_repo_branch" { 
-  type = string
-  description = "The branch to use for the argo master app repo"
-  default = "gcp"
 }
 
 variable "sealed_secrets_secret_id" {
@@ -165,6 +112,41 @@ variable "sealed_secrets_tls_key_path" {
   default = "~/.sealed-secrets/certs/mytls.key"
 }
 
+variable "iap_config_name" {
+  type = string
+  description = "The name for the BackendConfig resource. Used in the argo master apps"
+  default = "iap-config"
+}
+
+variable "argo_master_app_github_repo" {
+  type = string
+  description = "The github repo hosting the argo master apps"
+  default = "https://github.com/JeredLittle1/argo-master-app"
+}
+
+variable "argo_master_app_repo_branch" { 
+  type = string
+  description = "The branch to use for the argo master app repo"
+  default = "gcp"
+}
+
+variable "airflow_image" {
+  type = string
+  description = "The docker image url to use for Airflow"
+  default = "gcr.io/gcp-test-jlittle/custom-airflow-2.5.0"
+}
+
+variable "use_google_managed_cert" {
+  type = string
+  description = "Whether or not to use a google managed cert for ingress"
+  default = false
+}
+
+variable "team_repo_branch" {
+  type = string
+  description = "The branch in the team's repo to use for Airflow DAGs/apps/secrets."
+  default = "master"
+}
 /*
 variable "iap_users" {
   type = list

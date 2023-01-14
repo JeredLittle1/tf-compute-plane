@@ -45,10 +45,14 @@ resource "kubectl_manifest" "iap-config" {
     "apiVersion" = "cloud.google.com/v1"
     "kind"       = "BackendConfig"
     "metadata" = {
-      "name"      = "iap-config"
+      "name"      = var.iap_config_name
       "namespace" = var.compute_plane_namespace
     }
     "spec" = {
+        "healthCheck" : {
+          "checkIntervalSec" : 120,
+          "timeout" : 60
+        }
         "iap" : {
             "enabled" : true,
             "oauthclientCredentials" : {
@@ -61,9 +65,8 @@ resource "kubectl_manifest" "iap-config" {
     resource.kubectl_manifest.gcp-oauth-secret
   ]
 }
-
-/*
 resource "kubectl_manifest" "certificate" {
+  count = var.use_google_managed_cert ? 1 : 0
   yaml_body = yamlencode({
     "apiVersion" = "networking.gke.io/v1"
     "kind"       = "ManagedCertificate"
@@ -79,9 +82,6 @@ resource "kubectl_manifest" "certificate" {
     }
   })
 }
-*/
-
-
 resource "kubectl_manifest" "ingress" {
   yaml_body = yamlencode({
     "apiVersion" : "networking.k8s.io/v1",
@@ -89,14 +89,11 @@ resource "kubectl_manifest" "ingress" {
     "metadata" : {
       "name" : "${var.compute_plane_namespace}-ingress",
       "namespace" : var.compute_plane_namespace,
-      "annotations" : {
+      "annotations" : merge({
         # "ingress.kubernetes.io/rewrite-target" : "/",
         # Note: Make sure below is a GLOBAL IP address in GCP! Not REGIONAL!
-        "kubernetes.io/ingress.global-static-ip-name" : "${var.compute_plane_namespace}-ip",
-        # Use the two below settings if creating a managed cert with GCP: https://cloud.google.com/kubernetes-engine/docs/how-to/managed-certs
-        # "networking.gke.io/managed-certificates" : "managed-cert",
-        # "kubernetes.io/ingress.class" : "gce"
-      }
+        "kubernetes.io/ingress.global-static-ip-name" : "${var.compute_plane_namespace}-ip"
+      }, local.managed_cert_annotations)
     },
     "spec" : {
       # Used for a custom TLS cert NOT managed by Google.
@@ -105,14 +102,7 @@ resource "kubectl_manifest" "ingress" {
           "secretName": var.tls_secret_name
         }
       ] : [], 
-      "rules" : [
-        {
-          "host" : "compute-plane.${var.domain_name}",
-          "http" : {
-            "paths" : local.ingress_paths
-          }
-        }
-      ]
+      "rules" : local.ingress_rules
     }
   })
   depends_on = [

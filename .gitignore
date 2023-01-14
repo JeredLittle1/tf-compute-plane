@@ -3,3 +3,4 @@
 *.cert
 *.crt
 *.key
+*.local_vars.auto.tfvars

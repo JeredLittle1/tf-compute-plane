@@ -33,7 +33,7 @@ resource "helm_release" "argocd" {
           "enabled" : false
         },
         "server" : {
-          "extraArgs" : ["--insecure", "--rootpath=/cd"],
+          "extraArgs" : ["--insecure"],
           "service": {
             "annotations" : {
               "beta.cloud.google.com/backend-config" : "{\"default\": \"iap-config\"}",
