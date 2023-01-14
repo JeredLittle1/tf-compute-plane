@@ -58,7 +58,7 @@ resource "kubectl_manifest" "argo-master-app" {
         "targetRevision" : each.value.targetRevision,
         "path" : each.value.githubSubPath,
         "directory" : {
-            "recurse" : true
+          "recurse" : true
         }
       },
       "destination" : {

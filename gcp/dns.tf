@@ -14,11 +14,11 @@ resource "google_dns_managed_zone" "dns-managed-zone" {
   ]
 }
 resource "google_dns_record_set" "nginx" {
-  for_each = {for rule in local.ingress_rules: rule["host"] => rule }
-  name = "${each.key}."
-  type = "A"
-  ttl  = 300
+  for_each = { for rule in local.ingress_rules : rule["host"] => rule }
+  name     = "${each.key}."
+  type     = "A"
+  ttl      = 300
 
   managed_zone = google_dns_managed_zone.dns-managed-zone.name
-  rrdatas = [resource.google_compute_global_address.static_ip.address]
+  rrdatas      = [resource.google_compute_global_address.static_ip.address]
 }

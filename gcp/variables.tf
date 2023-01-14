@@ -84,74 +84,74 @@ variable "tls_secret_name" {
 }
 
 variable "compute_plane_namespace" {
-  type = string
+  type        = string
   description = "The namespace where the main compute plane resources live."
-  default = "compute-plane"
+  default     = "compute-plane"
 }
 
 variable "team_repo_url" {
-  type = string
+  type        = string
   description = "The Github repo URL which hosts the Argo applications"
-  default = "https://github.com/JeredLittle1/team-engineering.git"
+  default     = "https://github.com/JeredLittle1/team-engineering.git"
 }
 
 variable "sealed_secrets_secret_id" {
-  type = string
+  type        = string
   description = "The secret ID to bootstrap the certs for sealed secrets to"
-  default = "sealed-secrets-tls"
+  default     = "sealed-secrets-tls"
 }
 
-variable "sealed_secrets_tls_cert_path" { 
-  type = string 
+variable "sealed_secrets_tls_cert_path" {
+  type        = string
   description = "The TLS cert path for sealed secrets locally."
-  default = "~/.sealed-secrets/certs/mytls.crt"
+  default     = "~/.sealed-secrets/certs/mytls.crt"
 }
-variable "sealed_secrets_tls_key_path" { 
-  type = string 
+variable "sealed_secrets_tls_key_path" {
+  type        = string
   description = "The TLS key path for sealed secrets locally."
-  default = "~/.sealed-secrets/certs/mytls.key"
+  default     = "~/.sealed-secrets/certs/mytls.key"
 }
 
 variable "iap_config_name" {
-  type = string
+  type        = string
   description = "The name for the BackendConfig resource. Used in the argo master apps"
-  default = "iap-config"
+  default     = "iap-config"
 }
 
 variable "argo_master_app_github_repo" {
-  type = string
+  type        = string
   description = "The github repo hosting the argo master apps"
-  default = "https://github.com/JeredLittle1/argo-master-app"
+  default     = "https://github.com/JeredLittle1/argo-master-app"
 }
 
-variable "argo_master_app_repo_branch" { 
-  type = string
+variable "argo_master_app_repo_branch" {
+  type        = string
   description = "The branch to use for the argo master app repo"
-  default = "gcp"
+  default     = "gcp"
 }
 
 variable "airflow_image" {
-  type = string
+  type        = string
   description = "The docker image url to use for Airflow"
-  default = "gcr.io/gcp-test-jlittle/custom-airflow-2.5.0"
+  default     = "gcr.io/gcp-test-jlittle/custom-airflow-2.5.0"
 }
 
 variable "use_google_managed_cert" {
-  type = string
+  type        = string
   description = "Whether or not to use a google managed cert for ingress"
-  default = false
+  default     = false
 }
 
 variable "team_repo_branch" {
-  type = string
+  type        = string
   description = "The branch in the team's repo to use for Airflow DAGs/apps/secrets."
-  default = "master"
+  default     = "master"
 }
 
 variable "iap_users" {
-  type = list
+  type        = list(any)
   description = "The list of users who you want to add to be authorized to login via IAP"
   default = [
-      "user:jeredlittle1996@gmail.com",
-    ]
+    "user:jeredlittle1996@gmail.com",
+  ]
 }

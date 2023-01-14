@@ -7,12 +7,15 @@ variable "metric_server_revision" { type = string }
 variable "argocd_admin_password" { type = string }
 
 module "secrets" {
-    source = "../modules/secrets"
-    sealed_secret_id = var.sealed_secrets_secret_id
-    tls_cert_value = base64encode(file(var.sealed_secrets_tls_cert_path))
-    tls_key_value = base64encode(file(var.sealed_secrets_tls_key_path))
+  source           = "../modules/secrets"
+  sealed_secret_id = var.sealed_secrets_secret_id
+  tls_cert_value   = base64encode(file(var.sealed_secrets_tls_cert_path))
+  tls_key_value    = base64encode(file(var.sealed_secrets_tls_key_path))
+  namespace        = var.compute_plane_namespace
+  providers = {
+    kubectl = kubectl
+  }
 }
-
 module "argocd" {
     source = "../modules/argocd"
     domain_name = var.domain_name
