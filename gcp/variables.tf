@@ -147,7 +147,7 @@ variable "team_repo_branch" {
   description = "The branch in the team's repo to use for Airflow DAGs/apps/secrets."
   default = "master"
 }
-/*
+
 variable "iap_users" {
   type = list
   description = "The list of users who you want to add to be authorized to login via IAP"
@@ -155,4 +155,3 @@ variable "iap_users" {
       "user:jeredlittle1996@gmail.com",
     ]
 }
-*/

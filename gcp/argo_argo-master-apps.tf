@@ -1,3 +1,8 @@
+# Use: Creates the ArgoCD applications. These applications point to another github repo. 
+# This other github repo contains all the apps you want to manage with ArgoCD.
+# Remove this file if you don't have any managed ArgoCD apps you want to deploy with Terraform.
+
+
 resource "kubectl_manifest" "argo-helm-master-app" {
   for_each = { for config in local.helm_app_configs : config.name => config }
   yaml_body = yamlencode({

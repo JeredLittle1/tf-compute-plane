@@ -1,3 +1,5 @@
+# Use: Creates the VPC and subnetworks.
+
 resource "google_project_service" "compute" {
   service = "compute.googleapis.com"
 }

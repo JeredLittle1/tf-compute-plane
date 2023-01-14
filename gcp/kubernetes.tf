@@ -1,3 +1,5 @@
+# Use: Creates the namespace, bootstraps a few secrets, and adds all the ingress configurations.
+
 resource "kubectl_manifest" "namespace" {
   yaml_body = yamlencode({
     "apiVersion" = "v1"
@@ -24,6 +26,7 @@ resource "kubectl_manifest" "gcp-oauth-secret" {
 }
 
 resource "kubectl_manifest" "tls-secret" {
+  count = !var.use_google_managed_cert ? 1 : 0
   yaml_body = yamlencode({
     "apiVersion" = "v1"
     "kind"       = "Secret"
@@ -97,7 +100,7 @@ resource "kubectl_manifest" "ingress" {
     },
     "spec" : {
       # Used for a custom TLS cert NOT managed by Google.
-      "tls": var.tls_secret_name != null ? [
+      "tls": !var.use_google_managed_cert ? [
         {
           "secretName": var.tls_secret_name
         }

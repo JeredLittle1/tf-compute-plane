@@ -1,3 +1,5 @@
+# Use: Bootstraps ArgoCD to the cluster and sealed-secrets.
+
 module "argocd" {
   source         = "../modules/argocd"
   domain_name    = var.domain_name

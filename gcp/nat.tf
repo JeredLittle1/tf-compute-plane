@@ -1,3 +1,4 @@
+# Use: Creates the cloud router & nat gateway for the VPC.
 resource "google_compute_router" "router" {
   name    = "router"
   region  = var.region

@@ -1,4 +1,5 @@
-# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/containter_cluster
+# Use: Creates the GKE cluster, node pool, and service account.
+
 resource "google_container_cluster" "primary" {
   name                     = var.name
   location                 = var.location
