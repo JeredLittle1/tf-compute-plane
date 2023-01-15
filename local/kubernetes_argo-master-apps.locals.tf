@@ -1,7 +1,7 @@
 locals {
-  gcp_enabled = true
-  iap_enabled = true
-  local_enabled = false
+  gcp_enabled = false
+  iap_enabled = false
+  local_enabled = true
   helm_app_configs = [
     {
       "name" : "argo-events-master",
