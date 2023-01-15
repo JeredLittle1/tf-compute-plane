@@ -7,10 +7,17 @@
 ### Steps
 
 1. Open your terminal inside this folder (`local/`).
-2. Create the cluster by running `kind create cluster --config kind_cluster.yaml`
-3. If you only want to start certain services, go to the `kubernetes_argo-master-apps.tf` file
+2. If using Airflow locally, modify the `kind_cluster.yaml` & change the `extraMounts.hostPath` section to point to your local file system for Airflow DAGs:
+```
+    extraMounts:
+    - hostPath: /home/jered/workplace/team-engineering/airflow/dags
+      containerPath: /mnt/airflow/dags
+```
+
+3. Create the cluster by running `kind create cluster --config kind_cluster.yaml`
+4. If you only want to start certain services, go to the `kubernetes_argo-master-apps.tf` file
 and comment out the services you do not wish to start. **Note: ArgoCD and Sealed Secrets are always required.**
-4. Run `terraform apply` to create the services in your `kind` k8s cluster.
+5. Run `terraform apply` to create the services in your `kind` k8s cluster.
 
 
 ### Setting up port forwarding using Kubectl & Kind

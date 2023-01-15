@@ -8,7 +8,7 @@ locals {
       "namespace" : var.compute_plane_namespace,
       "project" : "default",
       "githubRepoUrl" : var.argo_master_app_github_repo,
-      "targetRevision" : "master",
+      "targetRevision" : var.argo_master_app_repo_branch,
       "githubSubPath" : "argo-events/"
       "helmValues" : {
         "argoEvents" : {
@@ -21,7 +21,7 @@ locals {
       "namespace" : var.compute_plane_namespace,
       "project" : "default",
       "githubRepoUrl" : var.argo_master_app_github_repo,
-      "targetRevision" : "master",
+      "targetRevision" : var.argo_master_app_repo_branch,
       "githubSubPath" : "argo-workflows/"
       "helmValues" : {
         "argoWorkflows" : {
@@ -42,7 +42,7 @@ locals {
       "namespace" : var.compute_plane_namespace,
       "project" : "default",
       "githubRepoUrl" : var.argo_master_app_github_repo,
-      "targetRevision" : "master",
+      "targetRevision" : var.argo_master_app_repo_branch,
       "githubSubPath" : "jupyterhub/"
       "helmValues" : {
         "jupyterhub" : {
@@ -63,7 +63,7 @@ locals {
       "namespace" : var.compute_plane_namespace,
       "project" : "default",
       "githubRepoUrl" : var.argo_master_app_github_repo,
-      "targetRevision" : "master",
+      "targetRevision" : var.argo_master_app_repo_branch,
       "githubSubPath" : "kube-prometheus-stack/"
       "helmValues" : {
         "grafana" : {
@@ -84,16 +84,16 @@ locals {
       "namespace" : var.compute_plane_namespace,
       "project" : "default",
       "githubRepoUrl" : var.argo_master_app_github_repo,
-      "targetRevision" : "master",
+      "targetRevision" : var.argo_master_app_repo_branch,
       "githubSubPath" : "sealed-secrets/"
       "helmValues" : {}
     },
     {
-      "name" : "airflow",
+      "name" : "airflow-master",
       "namespace" : var.compute_plane_namespace,
       "project" : "default",
-      "githubRepoUrl" : var.team_repo_url,
-      "targetRevision" : "master",
+      "githubRepoUrl" : var.argo_master_app_github_repo,
+      "targetRevision" : var.argo_master_app_repo_branch,
       "githubSubPath" : "airflow/"
       "helmValues" : {
         "airflow" : {

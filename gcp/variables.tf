@@ -127,7 +127,7 @@ variable "argo_master_app_github_repo" {
 variable "argo_master_app_repo_branch" {
   type        = string
   description = "The branch to use for the argo master app repo"
-  default     = "gcp"
+  default     = "master"
 }
 
 variable "airflow_image" {
