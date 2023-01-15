@@ -12,7 +12,22 @@ If you do not do this, it could result in poor performance or crashes.
 * See: https://learn.microsoft.com/en-us/windows/wsl/wsl-config
 * and: https://github.com/microsoft/WSL/issues/4166
 
-## Setting up port forwarding using Kubectl & Kind
+## Setup
+
+### Pre-requisites
+1. Install a docker environment locally via Docker Desktop or Rancher Desktop
+2. Install the `kind` CLI: https://kind.sigs.k8s.io/docs/user/quick-start/
+
+### Steps
+
+1. Open your terminal inside this folder (`local/`).
+2. Create the cluster by running `kind create cluster --config kind_cluster.yaml`
+3. If you only want to start certain services, go to the `kubernetes_argo-master-apps.tf` file
+and comment out the services you do not wish to start. **Note: ArgoCD and Sealed Secrets are always required.**
+4. Run `terraform apply` to create the services in your `kind` k8s cluster.
+
+
+### Setting up port forwarding using Kubectl & Kind
 Once you have applied all the terraform infrastructure, you need to port forward all the services in the cluster using `kubectl`. Here is an example:
 
 1. Run `kubectl get services -n compute-plane` to see all the available services:
