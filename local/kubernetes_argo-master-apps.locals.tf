@@ -137,6 +137,15 @@ locals {
       "targetRevision" : var.team_repo_branch,
       "githubSubPath" : "sealed-secrets/"
       "helmValues" : {}
-    },
+    },    
+    {
+      "name" : "team-workflows",
+      "namespace" : var.compute_plane_namespace,
+      "project" : "default",
+      "githubRepoUrl" : var.team_repo_url,
+      "targetRevision" : var.team_repo_branch,
+      "githubSubPath" : "workflows/"
+      "helmValues" : {}
+    }
   ]
 }
