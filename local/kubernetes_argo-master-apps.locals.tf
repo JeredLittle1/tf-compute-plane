@@ -89,6 +89,21 @@ locals {
       "helmValues" : {}
     },
     {
+      "name" : "spark-operator-master",
+      "namespace" : var.compute_plane_namespace,
+      "project" : "default",
+      "githubRepoUrl" : var.argo_master_app_github_repo,
+      "targetRevision" : var.argo_master_app_repo_branch,
+      "githubSubPath" : "spark-on-k8s-operator/"
+      "helmValues" : {
+        "extraServiceAccounts" : [
+          {"name" : "airflow-scheduler", "namespace" : var.compute_plane_namespace},
+          {"name" : "spark-operator", "namespace" : var.compute_plane_namespace},
+          {"name" : "airflow-worker", "namespace" : var.compute_plane_namespace}
+        ]
+      }
+    },
+    {
       "name" : "airflow-master",
       "namespace" : var.compute_plane_namespace,
       "project" : "default",
@@ -105,6 +120,11 @@ locals {
               "envName" : "AIRFLOW_CONN_MY_COOL_AIRFLOW_CONNECTION",
               "secretName" : "my-cool-airflow-connection",
               "secretKey" : "AIRFLOW_MY_COOL_AIRFLOW_CONNECTION"
+            },
+            {
+              "envName" : "AIRFLOW_CONN_KUBERNETES_DEFAULT",
+              "secretName" : "airflow-kubernetes-default",
+              "secretKey" : "AIRFLOW_CONN_KUBERNETES_DEFAULT"
             }
           ],
           "image" : {

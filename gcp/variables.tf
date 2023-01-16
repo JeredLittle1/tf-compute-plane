@@ -95,6 +95,22 @@ variable "team_repo_url" {
   default     = "https://github.com/JeredLittle1/team-engineering.git"
 }
 
+variable "team_git_repo_name" {
+  type        = string
+  description = "The Github repo name which hosts the team repo"
+  default     = "team-engineering-test"
+}
+
+variable "team_git_repo_org" {
+  type        = string
+  description = "The Github org which hosts the team repo"
+  default     = "JeredLittle1"
+}
+
+variable "github_token" {
+  type = string
+  description = "The github token to create the team repo with."
+}
 variable "sealed_secrets_secret_id" {
   type        = string
   description = "The secret ID to bootstrap the certs for sealed secrets to"
