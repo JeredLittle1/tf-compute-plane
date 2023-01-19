@@ -104,6 +104,23 @@ locals {
       }
     },
     {
+      "name" : "airbyte-master",
+      "namespace" : var.compute_plane_namespace,
+      "project" : "default",
+      "githubRepoUrl" : var.argo_master_app_github_repo,
+      "targetRevision" : var.argo_master_app_repo_branch,
+      "githubSubPath" : "airbyte/"
+      "helmValues" : {
+        "airbyte" : {
+          "webapp" : {
+            "service": {
+              "type" : "NodePort"
+            }
+          }
+        }
+      }
+    },
+    {
       "name" : "airflow-master",
       "namespace" : var.compute_plane_namespace,
       "project" : "default",

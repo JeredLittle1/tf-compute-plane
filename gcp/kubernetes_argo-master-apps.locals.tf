@@ -89,6 +89,22 @@ locals {
       "helmValues" : {}
     },
     {
+      "name" : "airbyte-master",
+      "namespace" : var.compute_plane_namespace,
+      "project" : "default",
+      "githubRepoUrl" : var.argo_master_app_github_repo,
+      "targetRevision" : var.argo_master_app_repo_branch,
+      "githubSubPath" : "airbyte/"
+      "helmValues" : {
+        "gcp" : {
+          "enabled" : local.gcp_enabled,
+          "iap" : {
+            "enabled" : local.iap_enabled
+          }
+        }
+      }
+    },
+    {
       "name" : "spark-operator-master",
       "namespace" : var.compute_plane_namespace,
       "project" : "default",
@@ -97,9 +113,9 @@ locals {
       "githubSubPath" : "spark-on-k8s-operator/"
       "helmValues" : {
         "extraServiceAccounts" : [
-          {"name" : "airflow-scheduler", "namespace" : var.compute_plane_namespace},
-          {"name" : "spark-operator", "namespace" : var.compute_plane_namespace},
-          {"name" : "airflow-worker", "namespace" : var.compute_plane_namespace}
+          { "name" : "airflow-scheduler", "namespace" : var.compute_plane_namespace },
+          { "name" : "spark-operator", "namespace" : var.compute_plane_namespace },
+          { "name" : "airflow-worker", "namespace" : var.compute_plane_namespace }
         ]
       }
     },
