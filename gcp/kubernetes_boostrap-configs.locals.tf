@@ -94,7 +94,26 @@ locals {
           }
         ]
       }
-    }
+    },    
+    {
+      "host" : "airbyte.${var.domain_name}",
+      "http" : {
+        "paths" : [
+          {
+            "path" : "/",
+            "pathType" : "Prefix",
+            "backend" : {
+              "service" : {
+                "name" : "airbyte-airbyte-webapp-svc",
+                "port" : {
+                  "number" : 80
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
   ]
   # Use the two below settings if creating a managed cert with GCP: https://cloud.google.com/kubernetes-engine/docs/how-to/managed-certs
   managed_cert_annotations = var.use_google_managed_cert ? {
