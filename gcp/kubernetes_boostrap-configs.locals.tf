@@ -114,6 +114,44 @@ locals {
         ]
       }
     },
+    {
+      "host" : "ml.${var.domain_name}",
+      "http" : {
+        "paths" : [
+          {
+            "path" : "/",
+            "pathType" : "Prefix",
+            "backend" : {
+              "service" : {
+                "name" : "mlflow",
+                "port" : {
+                  "number" : 5000
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "host" : "superset.${var.domain_name}",
+      "http" : {
+        "paths" : [
+          {
+            "path" : "/",
+            "pathType" : "Prefix",
+            "backend" : {
+              "service" : {
+                "name" : "superset",
+                "port" : {
+                  "number" : 8088
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
   ]
   # Use the two below settings if creating a managed cert with GCP: https://cloud.google.com/kubernetes-engine/docs/how-to/managed-certs
   managed_cert_annotations = var.use_google_managed_cert ? {

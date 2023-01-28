@@ -7,6 +7,9 @@ module "secrets" {
   providers = {
     kubectl = kubectl
   }
+  depends_on = [
+    module.argocd
+  ]
 }
 module "argocd" {
   source         = "../modules/argocd"

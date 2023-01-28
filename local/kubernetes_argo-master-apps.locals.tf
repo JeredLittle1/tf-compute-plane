@@ -163,6 +163,48 @@ locals {
           }
         }
       }
+    },
+    {
+      "name" : "mlflow-master",
+      "namespace" : var.compute_plane_namespace,
+      "project" : "default",
+      "githubRepoUrl" : var.argo_master_app_github_repo,
+      "targetRevision" : var.argo_master_app_repo_branch,
+      "githubSubPath" : "mlflow/"
+      "helmValues" : {
+        "mlFlow" : {
+          "local" : {
+            "enabled" : local.local_enabled
+          }
+        },
+        "gcp" : {
+          "enabled" : local.gcp_enabled,
+          "iap" : {
+            "enabled" : local.iap_enabled
+          }
+        }
+      }
+    },
+    {
+      "name" : "superset-master",
+      "namespace" : var.compute_plane_namespace,
+      "project" : "default",
+      "githubRepoUrl" : var.argo_master_app_github_repo,
+      "targetRevision" : var.argo_master_app_repo_branch,
+      "githubSubPath" : "superset/"
+      "helmValues" : {
+        "mlFlow" : {
+          "local" : {
+            "enabled" : local.local_enabled
+          }
+        },
+        "gcp" : {
+          "enabled" : local.gcp_enabled,
+          "iap" : {
+            "enabled" : local.iap_enabled
+          }
+        }
+      }
     }
   ]
   app_configs = [
