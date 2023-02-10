@@ -14,7 +14,8 @@ locals {
         "argoEvents" : {
           "create" : true
         }
-      }
+      },
+      "argo_sync_wave" : 0
     },
     {
       "name" : "argo-workflows-master",
@@ -35,7 +36,8 @@ locals {
             "enabled" : local.iap_enabled
           }
         }
-      }
+      },
+      "argo_sync_wave" : "0"
     },
     {
       "name" : "jupyterhub-master",
@@ -56,7 +58,8 @@ locals {
             "enabled" : local.iap_enabled
           }
         }
-      }
+      },
+      "argo_sync_wave" : "1"
     },
     {
       "name" : "kube-prometheus-stack-master",
@@ -77,7 +80,8 @@ locals {
             "enabled" : local.iap_enabled
           }
         }
-      }
+      },
+      "argo_sync_wave" : "1"
     },
     {
       "name" : "sealed-secrets-master",
@@ -86,7 +90,8 @@ locals {
       "githubRepoUrl" : var.argo_master_app_github_repo,
       "targetRevision" : var.argo_master_app_repo_branch,
       "githubSubPath" : "sealed-secrets/"
-      "helmValues" : {}
+      "helmValues" : {},
+      "argo_sync_wave" : "0"
     },
     {
       "name" : "spark-operator-master",
@@ -101,7 +106,8 @@ locals {
           {"name" : "spark-operator", "namespace" : var.compute_plane_namespace},
           {"name" : "airflow-worker", "namespace" : var.compute_plane_namespace}
         ]
-      }
+      },
+      "argo_sync_wave" : "2"
     },
     {
       "name" : "airbyte-master",
@@ -118,7 +124,8 @@ locals {
             }
           }
         }
-      }
+      },
+      "argo_sync_wave" : "3"
     },
     {
       "name" : "airflow-master",
@@ -162,8 +169,10 @@ locals {
             "enabled" : local.iap_enabled
           }
         }
-      }
+      },
+      "argo_sync_wave" : "4"
     },
+    /*
     {
       "name" : "mlflow-master",
       "namespace" : var.compute_plane_namespace,
@@ -185,6 +194,8 @@ locals {
         }
       }
     },
+    */
+    /*
     {
       "name" : "superset-master",
       "namespace" : var.compute_plane_namespace,
@@ -206,6 +217,7 @@ locals {
         }
       }
     }
+    */
   ]
   app_configs = [
     {

@@ -11,6 +11,9 @@ resource "kubectl_manifest" "argo-helm-master-app" {
     "metadata" : {
       "name" : each.value.name,
       "namespace" : each.value.namespace,
+      "annotations" : {
+        "argocd.argoproj.io/sync-wave" : lookup(each.value, "argo_sync_wave", "0")
+      }
     },
     "spec" : {
       "project" : each.value.project,
