@@ -3,6 +3,8 @@
 ### Pre-requisites
 1. Install a docker environment locally via Docker Desktop or Rancher Desktop
 2. Install the `kind` CLI: https://kind.sigs.k8s.io/docs/user/quick-start/
+3. You must have a TLS key/cert for sealed secrets. You will be prompted to enter the path to these files when running `terraform apply`. See: https://github.com/bitnami-labs/sealed-secrets/blob/main/docs/bring-your-own-certificates.md#generate-a-new-rsa-key-pair-certificates
+- ***NOTE: If using existing encrypted secrets in the cluster, you must make sure these keys are the same ones used for encrypting those secrets***
 
 ### Steps
 

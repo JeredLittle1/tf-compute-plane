@@ -37,12 +37,12 @@ variable "sealed_secrets_secret_id" {
 variable "sealed_secrets_tls_cert_path" {
   type        = string
   description = "The TLS cert path for sealed secrets locally."
-  default     = "~/.sealed-secrets/certs/mytls.crt"
+  # default     = "~/.sealed-secrets/certs/mytls.crt"
 }
 variable "sealed_secrets_tls_key_path" {
   type        = string
   description = "The TLS key path for sealed secrets locally."
-  default     = "~/.sealed-secrets/certs/mytls.key"
+  # default     = "~/.sealed-secrets/certs/mytls.key"
 }
 
 variable "argo_master_app_github_repo" {
