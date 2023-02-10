@@ -109,6 +109,7 @@ locals {
       },
       "argo_sync_wave" : "2"
     },
+    /*
     {
       "name" : "airbyte-master",
       "namespace" : var.compute_plane_namespace,
@@ -172,6 +173,7 @@ locals {
       },
       "argo_sync_wave" : "4"
     },
+    */
     /*
     {
       "name" : "mlflow-master",
