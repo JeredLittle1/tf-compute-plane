@@ -23,6 +23,7 @@ module "argocd" {
 }
 
 # Create metrics server which isn't included by default for local development. Helpful for memory/cpu analysis.
+/*
 resource "helm_release" "metrics" {
   name = "metrics-server"
 
@@ -39,3 +40,4 @@ resource "helm_release" "metrics" {
     )
   ]
 }
+*/
