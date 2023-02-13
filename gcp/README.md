@@ -1,5 +1,16 @@
 # About
-This folder contains all of the Terraform HCL code to bootstrap a GKE cluster. The following items are created when you run `terraform apply` in this folder:
+This folder contains all of the Terraform HCL code to bootstrap a GKE cluster. 
+
+## Prerequisites
+In order to apply these Terraform configs, you must first:
+
+1. Buy a Cloud Domain from Google (Used for DNS): https://cloud.google.com/domains/docs/overview
+2. Set up OAuth on GCP and obtain a client id and secret key (used for IAP): https://support.google.com/cloud/answer/6158849?hl=en
+3. Create a TLS cert for Sealed Secrets (Used to encrypt your secrets): https://github.com/bitnami-labs/sealed-secrets/blob/main/docs/bring-your-own-certificates.md
+- Note: If using the default `team-engineering` repo in the `variables.tf` file, the secrets will not be decrypted (because I own the private key for these!). You will need to fork the repo and encrypt your own secrets.
+4. Create a cert for IAP (Self-signed - Your browser will throw a warning when logging in): https://cloud.google.com/load-balancing/docs/ssl-certificates/self-managed-certs#create-key-and-cert
+
+The following items are created when you run `terraform apply` in this folder:
 
 ## VPC Configurations
 The VPC components configured are as follows:
