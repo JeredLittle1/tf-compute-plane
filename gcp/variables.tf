@@ -1,7 +1,6 @@
 variable "project" {
   description = "The project ID to host the cluster in"
   type        = string
-  default     = "gcp-test-jlittle"
 }
 
 variable "name" {
@@ -32,7 +31,6 @@ variable "nodecount" {
 variable "nodetype" {
   description = "type of nodes"
   type        = string
-  default     = "e2-standard-4"
 }
 
 variable "oauth_client_id" {
@@ -48,9 +46,8 @@ variable "oauth_client_secret" {
 }
 
 variable "domain_name" {
-  description = "Domain name used for ingress"
+  description = "Domain name used for ingress. Must be purchased manually prior to running apply. https://cloud.google.com/domains/docs/overview"
   type        = string
-  default     = "jlittle.xyz"
 }
 
 variable "argocd_version" {
@@ -68,13 +65,11 @@ variable "argocd_admin_password" {
 variable "tls_key_path" {
   description = "Path on local file system to the TLS key used for IAP."
   type        = string
-  default     = "/home/jered/.tls/key.pem"
 }
 
 variable "tls_cert_path" {
   description = "Path on local file system to the TLS cert used for IAP."
   type        = string
-  default     = "/home/jered/.tls/cert.pem"
 }
 
 variable "tls_secret_name" {
@@ -95,22 +90,6 @@ variable "team_repo_url" {
   default     = "https://github.com/JeredLittle1/team-engineering.git"
 }
 
-variable "team_git_repo_name" {
-  type        = string
-  description = "The Github repo name which hosts the team repo"
-  default     = "team-engineering-test"
-}
-
-variable "team_git_repo_org" {
-  type        = string
-  description = "The Github org which hosts the team repo"
-  default     = "JeredLittle1"
-}
-
-variable "github_token" {
-  type = string
-  description = "The github token to create the team repo with."
-}
 variable "sealed_secrets_secret_id" {
   type        = string
   description = "The secret ID to bootstrap the certs for sealed secrets to"
@@ -119,13 +98,11 @@ variable "sealed_secrets_secret_id" {
 
 variable "sealed_secrets_tls_cert_path" {
   type        = string
-  description = "The TLS cert path for sealed secrets locally."
-  default     = "~/.sealed-secrets/certs/mytls.crt"
+  description = "The TLS cert path for sealed secrets locally. See: https://github.com/bitnami-labs/sealed-secrets/blob/main/docs/bring-your-own-certificates.md"
 }
 variable "sealed_secrets_tls_key_path" {
   type        = string
-  description = "The TLS key path for sealed secrets locally."
-  default     = "~/.sealed-secrets/certs/mytls.key"
+  description = "The TLS key path for sealed secrets locally. See: https://github.com/bitnami-labs/sealed-secrets/blob/main/docs/bring-your-own-certificates.md"
 }
 
 variable "iap_config_name" {
@@ -164,6 +141,7 @@ variable "team_repo_branch" {
   default     = "master"
 }
 
+/*
 variable "iap_users" {
   type        = list(any)
   description = "The list of users who you want to add to be authorized to login via IAP"
@@ -171,3 +149,4 @@ variable "iap_users" {
     "user:jeredlittle1996@gmail.com",
   ]
 }
+*/
